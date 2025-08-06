@@ -9,8 +9,6 @@ from typing import Optional, List
 import openai
 from supabase import create_client, Client
 from dotenv import load_dotenv
-import functions_framework
-from fastapi.middleware.wsgi import WSGIMiddleware
 
 # Load environment variables
 load_dotenv()
@@ -191,19 +189,6 @@ async def delete_conversation(conversation_id: str, current_user: dict = Depends
         return {"message": "Conversation deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-# Firebase Functions entry point
-@functions_framework.http
-def api(request):
-    """HTTP Cloud Function."""
-    import uvicorn
-    from fastapi.middleware.wsgi import WSGIMiddleware
-
-    # Create WSGI app
-    wsgi_app = WSGIMiddleware(app)
-
-    # Handle the request
-    return wsgi_app(request.environ, lambda status, headers: None)
 
 if __name__ == "__main__":
     import uvicorn
