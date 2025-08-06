@@ -46,7 +46,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Use Render URL in production, localhost in development
   const API_BASE_URL = (import.meta as any).env?.PROD 
-    ? 'https://ai-chatbot-backend.onrender.com'  // Replace with your actual Render URL
+    ? 'https://ai-chatbot-backend-nmwf.onrender.com'
     : ((import.meta as any).env?.VITE_BACKEND_URL || 'http://localhost:8000')
 
   const sendMessage = useCallback(async (content: string) => {
