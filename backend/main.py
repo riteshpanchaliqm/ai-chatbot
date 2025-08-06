@@ -37,12 +37,15 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://localhost:3000",
+        "http://localhost:8000",
         "https://releasedashboard-dccee.web.app",
-        "https://releasedashboard-dccee.firebaseapp.com"
+        "https://releasedashboard-dccee.firebaseapp.com",
+        "https://ai-chatbot-backend-nmwf.onrender.com"
     ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 # Pydantic models
