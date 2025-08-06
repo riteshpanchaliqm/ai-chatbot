@@ -38,10 +38,11 @@ app.add_middleware(
         "http://localhost:8000",
         "https://releasedashboard-dccee.web.app",
         "https://releasedashboard-dccee.firebaseapp.com",
-        "https://ai-chatbot-backend-nmwf.onrender.com"
+        "https://ai-chatbot-backend-nmwf.onrender.com",
+        "*"  # Allow all origins for debugging
     ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"]
 )
@@ -84,6 +85,7 @@ async def root():
 @app.post("/chat")
 async def chat(request: ChatRequest, current_user: dict = Depends(get_current_user)):
     try:
+        print(f"Chat request received from user: {current_user.get('uid', 'unknown')}")
         # Get user ID from Firebase token
         user_id = current_user['uid']
         
