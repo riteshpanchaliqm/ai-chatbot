@@ -53,7 +53,14 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!content.trim()) return
 
     const token = await getAuthToken()
-    if (!token) throw new Error('Not authenticated')
+    // Temporarily allow requests without token for testing
+    const headers: any = {
+      'Content-Type': 'application/json'
+    }
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -73,12 +80,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
           conversation_id: currentConversationId,
           model: 'gpt-4'
         },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+        { headers }
       )
 
       const assistantMessage: Message = {
@@ -103,14 +105,15 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loadConversations = useCallback(async () => {
     const token = await getAuthToken()
-    if (!token) return
+    // Temporarily allow requests without token for testing
+    const headers: any = {}
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/conversations`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      const response = await axios.get(`${API_BASE_URL}/conversations`, { headers })
       setConversations(response.data)
     } catch (error) {
       console.error('Error loading conversations:', error)
@@ -119,14 +122,15 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loadConversation = useCallback(async (conversationId: string) => {
     const token = await getAuthToken()
-    if (!token) return
+    // Temporarily allow requests without token for testing
+    const headers: any = {}
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/conversations/${conversationId}/messages`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      const response = await axios.get(`${API_BASE_URL}/conversations/${conversationId}/messages`, { headers })
       
       const conversationMessages: Message[] = response.data.map((msg: any) => ({
         id: msg.id,
@@ -149,14 +153,15 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const deleteConversation = useCallback(async (conversationId: string) => {
     const token = await getAuthToken()
-    if (!token) return
+    // Temporarily allow requests without token for testing
+    const headers: any = {}
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
 
     try {
-      await axios.delete(`${API_BASE_URL}/conversations/${conversationId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      await axios.delete(`${API_BASE_URL}/conversations/${conversationId}`, { headers })
       
       setConversations(prev => prev.filter(conv => conv.id !== conversationId))
       

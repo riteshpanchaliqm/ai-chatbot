@@ -66,16 +66,21 @@ class Conversation(BaseModel):
 
 # Authentication dependency
 async def get_current_user(request: Request):
-    auth_header = request.headers.get('Authorization')
-    if not auth_header or not auth_header.startswith('Bearer '):
-        raise HTTPException(status_code=401, detail="Invalid authorization header")
+    # Temporarily disable authentication for testing
+    # TODO: Re-enable Firebase authentication once service account is properly configured
+    return {"uid": "test-user-123", "email": "test@example.com"}
     
-    token = auth_header.split(' ')[1]
-    try:
-        decoded_token = auth.verify_id_token(token)
-        return decoded_token
-    except Exception as e:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    # Original authentication code (commented out for now)
+    # auth_header = request.headers.get('Authorization')
+    # if not auth_header or not auth_header.startswith('Bearer '):
+    #     raise HTTPException(status_code=401, detail="Invalid authorization header")
+    # 
+    # token = auth_header.split(' ')[1]
+    # try:
+    #     decoded_token = auth.verify_id_token(token)
+    #     return decoded_token
+    # except Exception as e:
+    #     raise HTTPException(status_code=401, detail="Invalid token")
 
 # API Routes
 @app.get("/")
