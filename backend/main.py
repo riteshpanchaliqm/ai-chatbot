@@ -85,9 +85,11 @@ async def ensure_test_user_exists():
             }
             supabase.table('users').insert(user_data).execute()
             print("Created test user in database")
+        else:
+            print("Test user already exists in database")
     except Exception as e:
         print(f"Error ensuring test user exists: {e}")
-        # If RLS is blocking, we'll need to handle this differently
+        # If there's an error, we'll continue anyway and let the database handle it
         pass
 
 # API Routes
@@ -99,6 +101,9 @@ async def root():
 async def chat(request: ChatRequest, current_user: dict = Depends(get_current_user)):
     try:
         print(f"Chat request received from user: {current_user.get('uid', 'unknown')}")
+        
+        # Ensure test user exists in database
+        await ensure_test_user_exists()
         
         # Get user ID from Firebase token
         user_id = current_user['uid']
